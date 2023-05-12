@@ -2,9 +2,9 @@
 
 namespace Codedor\TranslatableTabs\Tests;
 
+use Codedor\TranslatableTabs\Providers\TranslatableTabsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Codedor\TranslatableTabs\Providers\TranslatableTabsServiceProvider;
 
 class TestCase extends Orchestra
 {

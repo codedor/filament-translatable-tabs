@@ -14,10 +14,13 @@ class TranslatableTabs extends Component
 
     protected string $view = 'forms::components.tabs';
 
-    public int | Closure $activeTab = 1;
-    public array | Closure $defaultFields = [];
-    public array | Closure $translatableFields = [];
-    public array | Closure $locales = [];
+    public int|Closure $activeTab = 1;
+
+    public array|Closure $defaultFields = [];
+
+    public array|Closure $translatableFields = [];
+
+    public array|Closure $locales = [];
 
     final public function __construct(string $label)
     {
@@ -59,21 +62,21 @@ class TranslatableTabs extends Component
         return $this->evaluate($this->activeTab);
     }
 
-    public function defaultFields(array | Closure $defaultFields): static
+    public function defaultFields(array|Closure $defaultFields): static
     {
         $this->defaultFields = $defaultFields;
 
         return $this;
     }
 
-    public function translatableFields(array | Closure $translatableFields): static
+    public function translatableFields(array|Closure $translatableFields): static
     {
         $this->translatableFields = $translatableFields;
 
         return $this;
     }
 
-    public function locales(array | Closure $locales): static
+    public function locales(array|Closure $locales): static
     {
         $this->locales = $locales;
 
@@ -97,6 +100,7 @@ class TranslatableTabs extends Component
                 ->badge(function (Livewire $livewire) use ($locale) {
                     if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
                         $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
+
                         return trans_choice('{1} :count error|[2,*] :count errors', $count, [
                             'count' => $count,
                         ]);

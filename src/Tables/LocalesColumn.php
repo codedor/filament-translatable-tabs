@@ -11,9 +11,9 @@ class LocalesColumn extends Column
 
     protected string $resourceAction = 'edit';
 
-    protected array | Closure $locales;
+    protected array|Closure $locales;
 
-    public function locales(array | Closure $locales)
+    public function locales(array|Closure $locales)
     {
         $this->locales = $locales;
 
