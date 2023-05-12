@@ -1,5 +1,7 @@
 <?php
 
+namespace Codedor\TranslatableTabs\Forms;
+
 use Closure;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Tabs\Tab;
