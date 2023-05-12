@@ -1,16 +1,18 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "codedor/filament-translatable-tabs",
+    "description": "This is my package filament-translatable-tabs",
     "keywords": [
-        ":vendor_name",
+        "codedor",
         "laravel",
-        ":package_slug"
+        "filament-translatable-tabs"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/codedor/filament-translatable-tabs",
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "filament/filament": "^2.17",
         "illuminate/contracts": "^10.0",
+        "illuminate/support": "^10.10",
         "spatie/laravel-package-tools": "^1.12"
     },
     "require-dev": {
@@ -26,19 +28,19 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Codedor\\TranslatableTabs\\": "src",
+            "Codedor\\TranslatableTabs\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Codedor\\TranslatableTabs\\Tests\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\Providers\\SkeletonServiceProvider"
+                "Codedor\\TranslatableTabs\\Providers\\TranslatableTabsServiceProvider"
             ]
         }
     },
