@@ -6,8 +6,6 @@ use Closure;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Livewire\Component as Livewire;
 
 class TranslatableTabs extends Component
