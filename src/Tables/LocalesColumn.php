@@ -35,6 +35,8 @@ class LocalesColumn extends Column
     public function getResourceUrl(string $locale): string
     {
         $livewire = $this->getLivewire();
+
+        /** @var \Filament\Resources\Resource $livewire */
         $resource = $livewire::getResource();
 
         return $resource::getUrl($this->resourceAction, ['record' => $this->getRecord(), 'locale' => "-{$locale}-tab"]);
