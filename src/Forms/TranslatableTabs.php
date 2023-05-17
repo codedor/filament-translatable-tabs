@@ -109,24 +109,6 @@ class TranslatableTabs extends Component
                     }
 
                     return null;
-                })
-                ->dehydrateStateUsing(function ($state, Model $record) use ($locale) {
-                    foreach (Arr::dot($state) as $key => $value) {
-                        $record->setTranslation($key, $locale, $value);
-                    }
-                })
-                ->formatStateUsing(function (?Model $record) use ($locale) {
-                    if (! $record) {
-                        return [];
-                    }
-
-                    $values = [];
-
-                    foreach ($record->getTranslatableAttributes() as $field) {
-                        $values[$field] = $record->getTranslation($field, $locale);
-                    }
-
-                    return $values;
                 });
         }
 

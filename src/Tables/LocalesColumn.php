@@ -7,7 +7,7 @@ use Filament\Tables\Columns\Column;
 
 class LocalesColumn extends Column
 {
-    protected string $view = 'tables.columns.locales-column';
+    protected string $view = 'filament-translatable-tabs::tables.columns.locales-column';
 
     protected string $resourceAction = 'edit';
 

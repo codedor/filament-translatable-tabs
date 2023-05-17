@@ -11,6 +11,7 @@ class TranslatableTabsServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('filament-translatable-tabs')
+            ->hasViews()
             ->setBasePath(__DIR__ . '/../');
     }
 }
