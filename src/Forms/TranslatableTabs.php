@@ -95,8 +95,8 @@ class TranslatableTabs extends Component
                 ->schema($this->evaluate($this->translatableFields))
                 ->statePath($locale)
                 ->iconPosition('after')
-                ->icon(fn (Closure $get) => $get("online.{$locale}") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline')
-                ->iconColor(fn (Closure $get) => $get("online.{$locale}") ? 'success' : 'danger')
+                ->icon(fn (Closure $get) => $get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline')
+                ->iconColor(fn (Closure $get) => $get("{$locale}.online") ? 'success' : 'danger')
                 ->badge(function (Livewire $livewire) use ($locale) {
                     if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
                         $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
