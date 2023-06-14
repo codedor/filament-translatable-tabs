@@ -2,7 +2,7 @@
     @foreach ($getLocales() as $locale)
         @php
             $stateColor = match ($getRecord()->getTranslation($getName(), $locale)) {
-                false => \Illuminate\Support\Arr::toCssClasses(['text-danger-700 bg-danger-500/10', 'dark:text-danger-500' => config('tables.dark_mode')]),
+                default => \Illuminate\Support\Arr::toCssClasses(['text-danger-700 bg-danger-500/10', 'dark:text-danger-500' => config('tables.dark_mode')]),
                 true => \Illuminate\Support\Arr::toCssClasses(['text-success-700 bg-success-500/10', 'dark:text-success-500' => config('tables.dark_mode')]),
             };
         @endphp
