@@ -51,3 +51,50 @@ use Codedor\TranslatableTabs\Resources\Traits\HasTranslations;
 ```
 
 This trait is necessary to save the translations together with your other fields. Since we have to manipulate the data after the form is submitted.
+
+We also provide a column to display your locales in a Filament table.
+
+![locales-column.png](locales-column.png)
+
+```php
+use Codedor\TranslatableTabs\Tables\LocalesColumn;
+
+public static function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            TextColumn::make('working_title'),
+            LocalesColumn::make('online'),
+        ])
+        // ...
+        ;
+}
+```
+
+### Passing the locales
+
+For both fields you can pass the locales through a `locales()` method
+
+```php
+\Codedor\TranslatableTabs\Tables\LocalesColumn::make('online')
+    ->locales(['en', 'nl']);
+\Codedor\TranslatableTabs\Forms\TranslatableTabs::make('translations')
+    ->locales(fn () => config('app.locales'));
+```
+
+It accepts an array or closure.
+
+But, since Filament is so awesome you don't have to do this everywhere you use these in your project.
+It can be defined once in a service provider:
+
+```php
+TranslatableTabs::configureUsing(function (TranslatableTabs $tabs) {
+    $tabs->locales(['nl', 'en']);
+});
+
+LocalesColumn::configureUsing(function (LocalesColumn $column) {
+    $column->locales(['nl', 'en']);
+});
+```
+
+Read more about this behavior [here](https://filamentphp.com/docs/2.x/forms/fields#global-settings).
