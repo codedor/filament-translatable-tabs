@@ -1,8 +1,6 @@
-# This is my package filament-translatable-tabs
+# Translatable Tabs for Filament
 
-## 
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Adds a tab per locale and adds integration for [spatie/laravel-translatable](https://spatie.be/docs/laravel-translatable/v6/introduction) in Filament.
 
 ## Installation
 
@@ -12,37 +10,30 @@ You can install the package via composer:
 composer require codedor/filament-translatable-tabs
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="filament-translatable-tabs-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="filament-translatable-tabs-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="filament-translatable-tabs-views"
-```
-
 ## Usage
 
 ```php
-$translatableTabs = new Codedor\TranslatableTabs();
-echo $translatableTabs->echoPhrase('Hello, Codedor!');
+use Codedor\TranslatableTabs\Forms\TranslatableTabs;
+
+public static function form(Form $form): Form
+{
+    return $form->schema([
+        TranslatableTabs::make('Translations')
+            ->defaultFields([
+                TextInput::make('working_title')
+                    ->required()
+                    ->maxLength(255),
+            ])
+            ->translatableFields([
+                TextInput::make("title")
+                    ->label('Title')
+                    ->required(fn (Closure $get) => $get("online")),
+
+                Toggle::make("online")
+                    ->label('Online'),
+            ])->columnSpan(['lg' => 2]),
+    ]);
+}
 ```
 
 ## Documentation
