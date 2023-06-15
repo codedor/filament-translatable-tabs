@@ -36,9 +36,10 @@ class LocalesColumn extends Column
     {
         $livewire = $this->getLivewire();
 
-        /** @var \Filament\Resources\Resource $livewire */
+        /** @var \Filament\Resources\Pages\Page $livewire */
         $resource = $livewire::getResource();
 
+        /** @var \Filament\Resources\Resource $resource */
         return $resource::getUrl($this->resourceAction, ['record' => $this->getRecord(), 'locale' => "-{$locale}-tab"]);
     }
 }
