@@ -94,9 +94,11 @@ class TranslatableTabs extends Component
         return $this;
     }
 
-    public function getIcon(): null|string
+    public function getIcon(string $locale): null|string
     {
-        return $this->evaluate($this->icon);
+        return $this->evaluate($this->icon, [
+            'locale' => $locale,
+        ]);
     }
 
     public function iconColor(null|string|Closure $iconColor): static
@@ -106,9 +108,11 @@ class TranslatableTabs extends Component
         return $this;
     }
 
-    public function getIconColor(): null|string
+    public function getIconColor(string $locale): null|string
     {
-        return $this->evaluate($this->iconColor);
+        return $this->evaluate($this->iconColor, [
+            'locale' => $locale,
+        ]);
     }
 
     public function getChildComponents(): array
@@ -123,8 +127,8 @@ class TranslatableTabs extends Component
                 ->schema($this->evaluate($this->translatableFields))
                 ->statePath($locale)
                 ->iconPosition('after')
-                ->icon(fn (Closure $get) => $this->getIcon() ?? ($get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline'))
-                ->iconColor(fn (Closure $get) => $this->getIconColor() ?? ($get("{$locale}.online") ? 'success' : 'danger'))
+                ->icon(fn (Closure $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline'))
+                ->iconColor(fn (Closure $get) => $this->getIconColor($locale) ?? ($get("{$locale}.online") ? 'success' : 'danger'))
                 ->badge(function (Livewire $livewire) use ($locale) {
                     if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
                         $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));

@@ -85,14 +85,14 @@ Or when using a Closure:
 
 ```php
 \Codedor\TranslatableTabs\Forms\TranslatableTabs::make('translations')
-    ->icon(fn (Closure $get) => $get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline');
+    ->icon(fn (string $locale, Closure $get) => $get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline');
 ```
 
 You can also change the color of the icon by using the `iconColor()` method, this expects a string or Closure:
 
 ```php
 \Codedor\TranslatableTabs\Forms\TranslatableTabs::make('translations')
-    ->iconColor(fn (Closure $get) => $get("{$locale}.online") ? 'success' : 'danger');
+    ->iconColor(fn (string $locale, Closure $get) => $get("{$locale}.online") ? 'success' : 'danger');
 ```
 
 ### Passing the locales
