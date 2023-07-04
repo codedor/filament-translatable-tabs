@@ -71,6 +71,30 @@ public static function table(Table $table): Table
 }
 ```
 
+### Showing a different icon
+
+You can show a different icon by using the `icon()` method, this expects a Closure, string or `false`.
+If `false` is returned, no icon will be shown. If a string or Closure is used it will expect a heroicon component, for example:
+
+```php
+\Codedor\TranslatableTabs\Forms\TranslatableTabs::make('translations')
+    ->icon('heroicon-o-status-online');
+```
+
+Or when using a Closure:
+
+```php
+\Codedor\TranslatableTabs\Forms\TranslatableTabs::make('translations')
+    ->icon(fn (Closure $get) => $get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline');
+```
+
+You can also change the color of the icon by using the `iconColor()` method, this expects a string or Closure:
+
+```php
+\Codedor\TranslatableTabs\Forms\TranslatableTabs::make('translations')
+    ->iconColor(fn (Closure $get) => $get("{$locale}.online") ? 'success' : 'danger');
+```
+
 ### Passing the locales
 
 For both fields you can pass the locales through a `locales()` method
