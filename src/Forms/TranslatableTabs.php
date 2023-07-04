@@ -124,7 +124,9 @@ class TranslatableTabs extends Component
 
         foreach ($this->evaluate($this->locales) as $locale) {
             $tabs[] = Tab::make($locale)
-                ->schema($this->evaluate($this->translatableFields))
+                ->schema($this->evaluate($this->translatableFields, [
+                    'locale' => $locale,
+                ]))
                 ->statePath($locale)
                 ->iconPosition('after')
                 ->icon(fn (Closure $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline'))
