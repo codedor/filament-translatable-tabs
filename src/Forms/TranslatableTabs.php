@@ -94,7 +94,7 @@ class TranslatableTabs extends Component
         return $this;
     }
 
-    public function getIcon(string $locale): null|string
+    public function getIcon(string $locale): ?string
     {
         return $this->evaluate($this->icon, [
             'locale' => $locale,
@@ -108,7 +108,7 @@ class TranslatableTabs extends Component
         return $this;
     }
 
-    public function getIconColor(string $locale): null|string
+    public function getIconColor(string $locale): ?string
     {
         return $this->evaluate($this->iconColor, [
             'locale' => $locale,
