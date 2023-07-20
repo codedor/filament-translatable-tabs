@@ -5,6 +5,7 @@ namespace Codedor\TranslatableTabs\Forms;
 use Closure;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Get;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Livewire\Component as Livewire;
 
@@ -12,7 +13,7 @@ class TranslatableTabs extends Component
 {
     use HasExtraAlpineAttributes;
 
-    protected string $view = 'forms::components.tabs';
+    protected string $view = 'filament-forms::components.tabs';
 
     public int|Closure $activeTab = 1;
 
@@ -94,7 +95,7 @@ class TranslatableTabs extends Component
         return $this;
     }
 
-    public function getIcon(string $locale): null|string
+    public function getIcon(string $locale): ?string
     {
         return $this->evaluate($this->icon, [
             'locale' => $locale,
@@ -108,7 +109,7 @@ class TranslatableTabs extends Component
         return $this;
     }
 
-    public function getIconColor(string $locale): null|string
+    public function getIconColor(string $locale): ?string
     {
         return $this->evaluate($this->iconColor, [
             'locale' => $locale,
@@ -129,8 +130,8 @@ class TranslatableTabs extends Component
                 ]))
                 ->statePath($locale)
                 ->iconPosition('after')
-                ->icon(fn (Closure $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline'))
-                ->iconColor(fn (Closure $get) => $this->getIconColor($locale) ?? ($get("{$locale}.online") ? 'success' : 'danger'))
+                ->icon(fn (Get $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-signal' : 'heroicon-o-signal-slash'))
+                ->iconColor(fn (Get $get) => $this->getIconColor($locale) ?? ($get("{$locale}.online") ? 'success' : 'danger'))
                 ->badge(function (Livewire $livewire) use ($locale) {
                     if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
                         $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
