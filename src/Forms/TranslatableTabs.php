@@ -17,6 +17,8 @@ class TranslatableTabs extends Component
 
     public int|Closure $activeTab = 1;
 
+    public bool|Closure $persistInQueryString = true;
+
     public array|Closure $defaultFields = [];
 
     public array|Closure $translatableFields = [];
@@ -43,11 +45,6 @@ class TranslatableTabs extends Component
     public function getTabQueryStringKey(): ?string
     {
         return 'locale';
-    }
-
-    public function isTabPersistedInQueryString(): bool
-    {
-        return true;
     }
 
     public function getActiveTab(): int
@@ -114,6 +111,18 @@ class TranslatableTabs extends Component
         return $this->evaluate($this->iconColor, [
             'locale' => $locale,
         ]);
+    }
+
+    public function persistInQueryString(bool|Closure $condition = true): static
+    {
+        $this->persistInQueryString = $condition;
+
+        return $this;
+    }
+
+    public function isTabPersistedInQueryString(): bool
+    {
+        return $this->evaluate($this->persistInQueryString);
     }
 
     public function getChildComponents(): array
