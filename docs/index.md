@@ -14,6 +14,25 @@ You can install the package via composer:
 composer require codedor/filament-translatable-tabs
 ```
 
+> **Note**
+> If you have not set up a custom theme and are using a Panel follow the instructions in the [Filament Docs](https://filamentphp.com/docs/3.x/panels/themes#creating-a-custom-theme) first. The following applies to both the Panels Package and the standalone Forms package.
+
+1. Import the plugin's stylesheet (if not already included) into your theme's css file.
+
+```css
+@import '../../../../vendor/codedor/filament-translatable-tabs/resources/css/plugin.css';
+```
+
+2. Add the plugin's views to your `tailwind.config.js` file.
+
+```js
+content: [
+    ...
+    './vendor/codedor/filament-translatable-tabs/resources/**/*.blade.php',
+]
+```
+
+
 ## Getting started
 
 Add the TranslatableTabs to your resource form:
@@ -88,13 +107,6 @@ Or when using a Closure:
     ->icon(fn (string $locale, Closure $get) => $get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline');
 ```
 
-You can also change the color of the icon by using the `iconColor()` method, this expects a string or Closure:
-
-```php
-\Codedor\TranslatableTabs\Forms\TranslatableTabs::make('translations')
-    ->iconColor(fn (string $locale, Closure $get) => $get("{$locale}.online") ? 'success' : 'danger');
-```
-
 ### Passing the locales
 
 For both fields you can pass the locales through a `locales()` method
@@ -121,4 +133,4 @@ LocalesColumn::configureUsing(function (LocalesColumn $column) {
 });
 ```
 
-Read more about this behavior [here](https://filamentphp.com/docs/2.x/forms/fields#global-settings).
+Read more about this behavior [here](https://filamentphp.com/docs/3.x/forms/fields/getting-started#global-settings).

@@ -27,8 +27,6 @@ class TranslatableTabs extends Component
 
     public null|string|Closure $icon = null;
 
-    public null|string|Closure $iconColor = null;
-
     final public function __construct(string $label)
     {
         $this->label($label);
@@ -99,20 +97,6 @@ class TranslatableTabs extends Component
         ]);
     }
 
-    public function iconColor(null|string|Closure $iconColor): static
-    {
-        $this->iconColor = $iconColor;
-
-        return $this;
-    }
-
-    public function getIconColor(string $locale): ?string
-    {
-        return $this->evaluate($this->iconColor, [
-            'locale' => $locale,
-        ]);
-    }
-
     public function persistInQueryString(bool|Closure $condition = true): static
     {
         $this->persistInQueryString = $condition;
@@ -140,7 +124,6 @@ class TranslatableTabs extends Component
                 ->statePath($locale)
                 ->iconPosition('after')
                 ->icon(fn (Get $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-signal' : 'heroicon-o-signal-slash'))
-                ->iconColor(fn (Get $get) => $this->getIconColor($locale) ?? ($get("{$locale}.online") ? 'success' : 'danger'))
                 ->badge(function (Livewire $livewire) use ($locale) {
                     if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
                         $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
