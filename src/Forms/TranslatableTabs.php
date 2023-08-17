@@ -23,7 +23,7 @@ class TranslatableTabs extends Component
 
     public array|Closure $defaultFields = [];
 
-    public array|Closure $translatableFields = [];
+    public Closure $translatableFields;
 
     public array|Closure $locales = [];
 
@@ -71,7 +71,7 @@ class TranslatableTabs extends Component
         return $this;
     }
 
-    public function translatableFields(array|Closure $translatableFields): static
+    public function translatableFields(Closure $translatableFields): static
     {
         $this->translatableFields = $translatableFields;
 

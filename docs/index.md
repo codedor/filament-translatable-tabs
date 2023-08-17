@@ -49,14 +49,17 @@ public static function form(Form $form): Form
                     ->required()
                     ->maxLength(255),
             ])
-            ->translatableFields([
-                TextInput::make("title")
-                    ->label('Title')
-                    ->required(fn (Closure $get) => $get("online")),
-
-                Toggle::make("online")
-                    ->label('Online'),
-            ])->columnSpan(['lg' => 2]),
+            ->translatableFields(function () {
+                return [
+                    TextInput::make("title")
+                        ->label('Title')
+                        ->required(fn (Closure $get) => $get("online")),
+                        ->required(fn (Closure $get) => $get("online")),
+    
+                    Toggle::make("online")
+                        ->label('Online'),
+                ];
+            })->columnSpan(['lg' => 2]),
     ]);
 }
 ```
