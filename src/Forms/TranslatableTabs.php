@@ -5,26 +5,29 @@ namespace Codedor\TranslatableTabs\Forms;
 use Closure;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Get;
+use Filament\Support\Concerns\CanBeContained;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Livewire\Component as Livewire;
 
 class TranslatableTabs extends Component
 {
+    use CanBeContained;
     use HasExtraAlpineAttributes;
 
-    protected string $view = 'forms::components.tabs';
+    protected string $view = 'filament-forms::components.tabs';
 
     public int|Closure $activeTab = 1;
 
+    public bool|Closure $persistInQueryString = true;
+
     public array|Closure $defaultFields = [];
 
-    public array|Closure $translatableFields = [];
+    public Closure $translatableFields;
 
     public array|Closure $locales = [];
 
     public null|string|Closure $icon = null;
-
-    public null|string|Closure $iconColor = null;
 
     final public function __construct(string $label)
     {
@@ -42,11 +45,6 @@ class TranslatableTabs extends Component
     public function getTabQueryStringKey(): ?string
     {
         return 'locale';
-    }
-
-    public function isTabPersistedInQueryString(): bool
-    {
-        return true;
     }
 
     public function getActiveTab(): int
@@ -73,7 +71,7 @@ class TranslatableTabs extends Component
         return $this;
     }
 
-    public function translatableFields(array|Closure $translatableFields): static
+    public function translatableFields(Closure $translatableFields): static
     {
         $this->translatableFields = $translatableFields;
 
@@ -94,25 +92,23 @@ class TranslatableTabs extends Component
         return $this;
     }
 
-    public function getIcon(string $locale): null|string
+    public function getIcon(string $locale): ?string
     {
         return $this->evaluate($this->icon, [
             'locale' => $locale,
         ]);
     }
 
-    public function iconColor(null|string|Closure $iconColor): static
+    public function persistInQueryString(bool|Closure $condition = true): static
     {
-        $this->iconColor = $iconColor;
+        $this->persistInQueryString = $condition;
 
         return $this;
     }
 
-    public function getIconColor(string $locale): null|string
+    public function isTabPersistedInQueryString(): bool
     {
-        return $this->evaluate($this->iconColor, [
-            'locale' => $locale,
-        ]);
+        return $this->evaluate($this->persistInQueryString);
     }
 
     public function getChildComponents(): array
@@ -129,8 +125,8 @@ class TranslatableTabs extends Component
                 ]))
                 ->statePath($locale)
                 ->iconPosition('after')
-                ->icon(fn (Closure $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline'))
-                ->iconColor(fn (Closure $get) => $this->getIconColor($locale) ?? ($get("{$locale}.online") ? 'success' : 'danger'))
+                // ->iconColor((fn (Get $get) => ($get("{$locale}.online") ? 'success' : 'danger')))
+                ->icon(fn (Get $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle'))
                 ->badge(function (Livewire $livewire) use ($locale) {
                     if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
                         $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
