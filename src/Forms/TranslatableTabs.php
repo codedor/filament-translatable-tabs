@@ -32,6 +32,8 @@ class TranslatableTabs extends Component
     final public function __construct(string $label)
     {
         $this->label($label);
+
+        $this->columnSpan(['lg' => 2]);
     }
 
     public static function make(): static
