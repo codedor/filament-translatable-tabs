@@ -137,3 +137,34 @@ LocalesColumn::configureUsing(function (LocalesColumn $column) {
 ```
 
 Read more about this behavior [here](https://filamentphp.com/docs/3.x/forms/fields/getting-started#global-settings).
+
+## Actions
+
+### CopyTranslationAction
+
+This package provides an action to copy a locale to another locale.
+
+To use it add it to your Edit page, e.g.:
+
+```php
+use Codedor\TranslatableTabs\Actions\CopyTranslationAction;
+use Filament\Actions\DeleteAction;
+use Filament\Resources\Pages\EditRecord;
+
+class EditJobPage extends EditRecord
+{
+    // ...
+    
+    protected function getHeaderActions(): array
+    {
+        return [
+            CopyTranslationAction::make(),
+            DeleteAction::make(),
+        ];
+    }
+    
+    // ...
+}
+```
+
+When clicked, this will open a modal and will then copy the data from the selected locale to the other locale.
