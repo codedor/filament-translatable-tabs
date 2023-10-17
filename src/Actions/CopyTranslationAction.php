@@ -16,7 +16,7 @@ class CopyTranslationAction extends Action
         return 'copy-translation';
     }
 
-    public function locales(array $locales) : self
+    public function locales(array $locales): self
     {
         $this->locales = $locales;
 

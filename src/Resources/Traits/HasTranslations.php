@@ -2,7 +2,6 @@
 
 namespace Codedor\TranslatableTabs\Resources\Traits;
 
-use Filament\Actions\Action;
 use Illuminate\Support\Arr;
 
 trait HasTranslations
