@@ -4,6 +4,7 @@ namespace Codedor\TranslatableTabs\Actions;
 
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Throwable;
 
@@ -34,7 +35,9 @@ class CopyTranslationAction extends Action
 
         $this->label(__('filament-translatable-tabs::copy-translation.label'));
 
-        $this->modalHeading(fn (): string => __('filament-translatable-tabs::copy-translation.copy translation for :label', ['label' => $this->getRecordTitle()]));
+        $this->modalHeading(fn (Component $livewire): string => __('filament-translatable-tabs::copy-translation.copy translation for :label', [
+            'label' => $this->getRecord() ? $this->getRecordTitle() : Str::headline($livewire::getResource()::getModelLabel()),
+        ]));
 
         $this->successNotificationTitle(__('filament-translatable-tabs::copy-translation.success notification'));
 
