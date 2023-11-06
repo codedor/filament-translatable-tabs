@@ -93,6 +93,28 @@ public static function table(Table $table): Table
 }
 ```
 
+And also an entry for info lists.
+
+```php
+use Codedor\TranslatableTabs\InfoLists\TranslatableEntry;
+
+TranslatableEntry::make([
+    \Filament\Infolists\Components\TextEntry::make('title'),
+    \Filament\Infolists\Components\TextEntry::make('slug'),
+]);
+```
+
+By default, we will check the `LocaleCollection` facade, but you can also pass your own.
+
+```php
+use Codedor\TranslatableTabs\InfoLists\TranslatableEntry;
+
+TranslatableEntry::make([
+    \Filament\Infolists\Components\TextEntry::make('title'),
+    \Filament\Infolists\Components\TextEntry::make('slug'),
+], \App\CustomLocaleCollection::class);
+```
+
 ### Showing a different icon
 
 You can show a different icon by using the `icon()` method, this expects a Closure, string or `false`.
