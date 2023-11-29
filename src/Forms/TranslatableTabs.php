@@ -14,8 +14,8 @@ use Livewire\Component as Livewire;
 class TranslatableTabs extends Component
 {
     use CanBeContained;
-    use HasExtraAlpineAttributes;
     use CanPersistTab;
+    use HasExtraAlpineAttributes;
 
     protected string $view = 'filament-forms::components.tabs';
 
