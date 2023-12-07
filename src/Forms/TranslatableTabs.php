@@ -7,12 +7,14 @@ use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Get;
 use Filament\Support\Concerns\CanBeContained;
+use Filament\Support\Concerns\CanPersistTab;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Livewire\Component as Livewire;
 
 class TranslatableTabs extends Component
 {
     use CanBeContained;
+    use CanPersistTab;
     use HasExtraAlpineAttributes;
 
     protected string $view = 'filament-forms::components.tabs';
