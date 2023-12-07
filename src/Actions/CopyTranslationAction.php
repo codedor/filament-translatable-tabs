@@ -54,7 +54,11 @@ class CopyTranslationAction extends Action
 
         $this->action(function (array $data, Component $livewire) {
             try {
-                $livewire->data[$data['to_locale']] = $livewire->data[$data['from_locale']];
+                data_set(
+                    $livewire,
+                    'data.from_locale',
+                    data_get($livewire, 'data.locale')
+                );
 
                 $this->success();
             } catch (Throwable $e) {
