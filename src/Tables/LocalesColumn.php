@@ -4,6 +4,7 @@ namespace Codedor\TranslatableTabs\Tables;
 
 use Closure;
 use Filament\Tables\Columns\Column;
+use Illuminate\Support\Str;
 
 class LocalesColumn extends Column
 {
@@ -40,9 +41,11 @@ class LocalesColumn extends Column
         $resource = $livewire::getResource();
 
         /** @var \Filament\Resources\Resource $resource */
-        return $resource::getUrl($this->resourceAction, [
+        $url = $resource::getUrl($this->resourceAction, [
             'record' => $this->getRecord(),
             'locale' => "-{$locale}-tab",
         ]);
+
+        return Str::lower($url);
     }
 }
