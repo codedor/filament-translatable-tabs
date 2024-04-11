@@ -115,6 +115,32 @@ TranslatableEntry::make([
 ], \App\CustomLocaleCollection::class);
 ```
 
+### Adding extra tabs
+
+You can add extra tabs by using the `->extraTabs()` method, this expects a Closure, array or `null`.
+Passing an array here with Tabs will add them next to the general tab, this can be useful for separating your General tab in case it becomes too long.
+
+```php
+use Codedor\TranslatableTabs\Forms\TranslatableTabs;
+use Filament\Forms\Components\Tabs\Tab;
+
+public static function form(Form $form): Form
+{
+    return $form->schema([
+        TranslatableTabs::make('Translations')
+            ->defaultFields(...)
+            ->extraFields([
+                Tab::make('More options')->schema([
+                    Text::make('Extra option')
+                        ->required(), 
+                ]),
+            ])
+            ->translatableFields(...)
+            ->columnSpan(['lg' => 2]),
+    ]);
+}
+```
+
 ### Showing a different icon
 
 You can show a different icon by using the `icon()` method, this expects a Closure, string or `false`.
