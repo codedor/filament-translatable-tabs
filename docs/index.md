@@ -129,7 +129,7 @@ public static function form(Form $form): Form
     return $form->schema([
         TranslatableTabs::make('Translations')
             ->defaultFields(...)
-            ->extraFields([
+            ->extraTabs([
                 Tab::make('More options')->schema([
                     Text::make('Extra option')
                         ->required(), 
