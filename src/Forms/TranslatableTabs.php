@@ -4,7 +4,6 @@ namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
 use Codedor\FilamentArchitect\Engines\Architect;
-use Filament\Forms\Components\BaseFileUpload;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Get;
@@ -40,7 +39,7 @@ class TranslatableTabs extends Component
 
         $this->columnSpan(['lg' => 2]);
 
-        $this->afterStateHydrated(static function (TranslatableTabs $component, string | array | null $state, Livewire $livewire): void {
+        $this->afterStateHydrated(static function (TranslatableTabs $component, string|array|null $state, Livewire $livewire): void {
             if (blank($state)) {
                 $component->state([]);
 
