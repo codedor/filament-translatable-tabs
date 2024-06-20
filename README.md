@@ -44,6 +44,13 @@ public static function form(Form $form): Form
                     ->required()
                     ->maxLength(255),
             ])
+            ->extraTabs([ // Optional
+                Tab::make('More things')->schema([
+                    TextInput::make('more_things')
+                        ->required()
+                        ->maxLength(255),
+                ]),
+            ])
             ->translatableFields([
                 TextInput::make("title")
                     ->label('Title')
