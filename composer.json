@@ -10,7 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2|^8.3",
-        "codedor/laravel-locale-collection": "dev-feature/laravel-11",
+        "codedor/laravel-locale-collection": "^1.0",
         "filament/filament": "^3.2",
         "illuminate/contracts": "^10.0|^11.0",
         "illuminate/support": "^10.10|^11.0",
@@ -43,9 +43,6 @@
             "providers": [
                 "Codedor\\TranslatableTabs\\Providers\\TranslatableTabsServiceProvider"
             ]
-        },
-        "branch-alias": {
-            "dev-feature/laravel-11": "1.1.x-dev"
         }
     },
     "config": {
