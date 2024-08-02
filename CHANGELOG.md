@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.0.0 - 2023-12-07
+
+### What's Changed
+
+* Bump actions/checkout from 3 to 4 by @dependabot in https://github.com/codedor/filament-translatable-tabs/pull/9
+* Bump stefanzweifel/git-auto-commit-action from 4 to 5 by @dependabot in https://github.com/codedor/filament-translatable-tabs/pull/10
+* Feature/filament v3.1 by @jyrkidn in https://github.com/codedor/filament-translatable-tabs/pull/11
+
+**Full Changelog**: https://github.com/codedor/filament-translatable-tabs/compare/v0.1.5...v1.0.0
+
 ## v0.1.5 - 2023-11-06
 
 **Full Changelog**: https://github.com/codedor/filament-translatable-tabs/compare/v0.1.4...v0.1.5
