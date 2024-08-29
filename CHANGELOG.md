@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.2.0 - 2024-08-29
+
+### What's Changed
+
+* Added an extraTabs function to the field by @AngryMoustache in https://github.com/codedor/filament-translatable-tabs/pull/16
+* fix cancel button; refs #THS-89 by @kjellkeisse in https://github.com/codedor/filament-translatable-tabs/pull/20
+* Hydrate and dehydrate the tabs using the field instead of a trait by @AngryMoustache in https://github.com/codedor/filament-translatable-tabs/pull/21
+
+### New Contributors
+
+* @kjellkeisse made their first contribution in https://github.com/codedor/filament-translatable-tabs/pull/20
+
+**Full Changelog**: https://github.com/codedor/filament-translatable-tabs/compare/v1.1.0...v1.2.0
+
 ## v1.1.0 - 2024-08-02
 
 ### What's Changed
