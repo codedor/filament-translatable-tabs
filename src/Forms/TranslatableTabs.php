@@ -3,13 +3,13 @@
 namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
-use Codedor\FilamentArchitect\Engines\Architect;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Get;
 use Filament\Support\Concerns\CanBeContained;
 use Filament\Support\Concerns\CanPersistTab;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Livewire\Component as Livewire;
 
@@ -58,7 +58,7 @@ class TranslatableTabs extends Component
                 foreach ($record->getTranslatedLocales($field) as $locale) {
                     $value = $record->getTranslation($field, $locale);
 
-                    if ($value instanceof Architect) {
+                    if ($value instanceof Arrayable) {
                         $value = $value->toArray();
                     }
 
