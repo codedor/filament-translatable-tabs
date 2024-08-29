@@ -22,7 +22,8 @@ trait HasTranslations
     {
         $record = $this->getRecord();
         foreach ($record->getTranslatableAttributes() as $field) {
-            foreach ($record->getTranslatedLocales($field) as $locale) {
+            $locales = array_keys($record->getTranslations($field, config('translatable.allowed-locales', null)));
+            foreach ($locales as $locale) {
                 $data[$locale][$field] = $record->getTranslation($field, $locale);
             }
         }
