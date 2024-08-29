@@ -9,6 +9,8 @@ use Filament\Forms\Get;
 use Filament\Support\Concerns\CanBeContained;
 use Filament\Support\Concerns\CanPersistTab;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Arr;
 use Livewire\Component as Livewire;
 
 class TranslatableTabs extends Component
@@ -38,6 +40,34 @@ class TranslatableTabs extends Component
         $this->label($label);
 
         $this->columnSpan(['lg' => 2]);
+
+        $this->afterStateHydrated(static function (TranslatableTabs $component, string|array|null $state, Livewire $livewire): void {
+            if (blank($state)) {
+                $component->state([]);
+
+                return;
+            }
+
+            $record = $livewire->getRecord();
+
+            if (! $record || ! method_exists($record, 'getTranslatableAttributes')) {
+                return;
+            }
+
+            foreach ($record->getTranslatableAttributes() as $field) {
+                foreach ($record->getTranslatedLocales($field) as $locale) {
+                    $value = $record->getTranslation($field, $locale);
+
+                    if ($value instanceof Arrayable) {
+                        $value = $value->toArray();
+                    }
+
+                    $state[$locale][$field] = $value;
+                }
+            }
+
+            $component->state($state);
+        });
     }
 
     public static function make(): static
@@ -46,6 +76,23 @@ class TranslatableTabs extends Component
         $static->configure();
 
         return $static;
+    }
+
+    public function dehydrateState(array &$state, bool $isDehydrated = true): void
+    {
+        parent::dehydrateState($state, $isDehydrated);
+
+        $model = app($this->getModel());
+
+        foreach (Arr::except($state['data'], $model->getFillable()) as $locale => $values) {
+            if (! is_array($values)) {
+                continue;
+            }
+
+            foreach (Arr::only($values, $model->getTranslatableAttributes()) as $key => $value) {
+                $state['data'][$key][$locale] = $value;
+            }
+        }
     }
 
     public function getTabQueryStringKey(): ?string
@@ -98,6 +145,11 @@ class TranslatableTabs extends Component
         return $this;
     }
 
+    public function getLocales(): array
+    {
+        return $this->evaluate($this->locales);
+    }
+
     public function icon(null|string|Closure $icon): static
     {
         $this->icon = $icon;
@@ -127,15 +179,14 @@ class TranslatableTabs extends Component
     public function getChildComponents(): array
     {
         $tabs = [
-            Tab::make('Default')
-                ->schema($this->evaluate($this->defaultFields)),
+            Tab::make('Default')->schema($this->evaluate($this->defaultFields)),
         ];
 
         if (! is_null($this->extraTabs)) {
             $tabs = array_merge($tabs, $this->evaluate($this->extraTabs));
         }
 
-        foreach ($this->evaluate($this->locales) as $locale) {
+        foreach ($this->getLocales() as $locale) {
             $tabs[] = Tab::make($locale)
                 ->schema($this->evaluate($this->translatableFields, [
                     'locale' => $locale,
