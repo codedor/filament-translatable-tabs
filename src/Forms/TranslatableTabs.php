@@ -27,6 +27,8 @@ class TranslatableTabs extends Component
 
     public array|Closure $defaultFields = [];
 
+    public null|array|Closure $extraTabs = null;
+
     public Closure $translatableFields;
 
     public array|Closure $locales = [];
@@ -122,6 +124,13 @@ class TranslatableTabs extends Component
         return $this;
     }
 
+    public function extraTabs(null|array|Closure $extraTabs): static
+    {
+        $this->extraTabs = $extraTabs;
+
+        return $this;
+    }
+
     public function translatableFields(Closure $translatableFields): static
     {
         $this->translatableFields = $translatableFields;
@@ -172,6 +181,10 @@ class TranslatableTabs extends Component
         $tabs = [
             Tab::make('Default')->schema($this->evaluate($this->defaultFields)),
         ];
+
+        if (! is_null($this->extraTabs)) {
+            $tabs = array_merge($tabs, $this->evaluate($this->extraTabs));
+        }
 
         foreach ($this->getLocales() as $locale) {
             $tabs[] = Tab::make($locale)
