@@ -84,7 +84,7 @@ class TranslatableTabs extends Component
 
         $model = app($this->getModel());
 
-        foreach (Arr::except($state['data'], $model->getFillable()) as $locale => $values) {
+        foreach (Arr::except($state['data'] ?? [], $model->getFillable()) as $locale => $values) {
             if (! is_array($values)) {
                 continue;
             }
