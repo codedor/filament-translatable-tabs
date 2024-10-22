@@ -48,7 +48,7 @@ class TranslatableTabs extends Component
                 return;
             }
 
-            $record = $livewire->getRecord();
+            $record = method_exists($livewire, 'getRecord') ? $livewire->getRecord() : null;
 
             if (! $record || ! method_exists($record, 'getTranslatableAttributes')) {
                 return;
@@ -83,6 +83,14 @@ class TranslatableTabs extends Component
         parent::dehydrateState($state, $isDehydrated);
 
         $model = app($this->getModel());
+
+        if (
+            ! $model
+            || ! method_exists($model, 'getFillable')
+            || ! method_exists($model, 'getTranslatableAttributes')
+        ) {
+            return;
+        }
 
         foreach (Arr::except($state['data'] ?? [], $model->getFillable()) as $locale => $values) {
             if (! is_array($values)) {
