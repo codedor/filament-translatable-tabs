@@ -40,34 +40,6 @@ class TranslatableTabs extends Component
         $this->label($label);
 
         $this->columnSpan(['lg' => 2]);
-
-        $this->afterStateHydrated(static function (TranslatableTabs $component, string|array|null $state, Livewire $livewire): void {
-            if (blank($state)) {
-                $component->state([]);
-
-                return;
-            }
-
-            $record = method_exists($livewire, 'getRecord') ? $livewire->getRecord() : null;
-
-            if (! $record || ! method_exists($record, 'getTranslatableAttributes')) {
-                return;
-            }
-
-            foreach ($record->getTranslatableAttributes() as $field) {
-                foreach ($record->getTranslatedLocales($field) as $locale) {
-                    $value = $record->getTranslation($field, $locale);
-
-                    if ($value instanceof Arrayable) {
-                        $value = $value->toArray();
-                    }
-
-                    $state[$locale][$field] = $value;
-                }
-            }
-
-            $component->state($state);
-        });
     }
 
     public static function make(): static
@@ -217,5 +189,31 @@ class TranslatableTabs extends Component
         }
 
         return $tabs;
+    }
+
+    public function hydrateDefaultState(?array &$hydratedDefaultState): void
+    {
+        parent::hydrateDefaultState($hydratedDefaultState);
+
+        $state = $this->getState();
+        $record = method_exists($this->getLivewire(), 'getRecord') ? $this->getLivewire()->getRecord() : null;
+
+        if (! $record || ! method_exists($record, 'getTranslatableAttributes')) {
+            return;
+        }
+
+        foreach ($record->getTranslatableAttributes() as $field) {
+            foreach ($record->getTranslatedLocales($field) as $locale) {
+                $value = $record->getTranslation($field, $locale);
+
+                if ($value instanceof Arrayable) {
+                    $value = $value->toArray();
+                }
+
+                $state[$locale][$field] = $value;
+            }
+        }
+
+        $this->state($state);
     }
 }
