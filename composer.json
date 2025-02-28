@@ -10,7 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "codedor/laravel-locale-collection": "dev-laravel-12 as 1.2.0",
+        "codedor/laravel-locale-collection": "^1.2.1",
         "filament/filament": "^3.2",
         "illuminate/contracts": "^10.0|^11.0|^12.0",
         "illuminate/support": "^10.10|^11.0|^12.0",
