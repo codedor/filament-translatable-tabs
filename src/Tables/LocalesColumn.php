@@ -4,6 +4,7 @@ namespace Codedor\TranslatableTabs\Tables;
 
 use Closure;
 use Filament\Tables\Columns\Column;
+use Filament\Tables\Contracts\HasTable;
 use Illuminate\Support\Str;
 
 class LocalesColumn extends Column
@@ -37,7 +38,7 @@ class LocalesColumn extends Column
     {
         $livewire = $this->getLivewire();
 
-        /** @var \Filament\Resources\Pages\Page $livewire */
+        /** @var \Filament\Resources\Pages\Page&HasTable $livewire */
         $resource = $livewire::getResource();
 
         /** @var \Filament\Resources\Resource $resource */
