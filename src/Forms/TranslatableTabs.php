@@ -3,11 +3,8 @@
 namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
-use Filament\Forms\Components\Component;
-use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Get;
 use Filament\Support\Concerns\CanBeContained;
-use Filament\Support\Concerns\CanPersistTab;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;

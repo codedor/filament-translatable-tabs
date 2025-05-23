@@ -4,8 +4,6 @@ namespace Codedor\TranslatableTabs\InfoLists;
 
 use Codedor\LocaleCollection\Facades\LocaleCollection;
 use Codedor\LocaleCollection\Locale;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
 
 class TranslatableEntry
 {
