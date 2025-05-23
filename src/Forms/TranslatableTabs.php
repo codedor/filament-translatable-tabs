@@ -13,13 +13,13 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Livewire\Component as Livewire;
 
-class TranslatableTabs extends Component
+class TranslatableTabs extends \Filament\Schemas\Components\Component
 {
     use CanBeContained;
-    use CanPersistTab;
+    use \Filament\Schemas\Components\Concerns\CanPersistTab;
     use HasExtraAlpineAttributes;
 
-    protected string $view = 'filament-forms::components.tabs';
+    protected string $view = 'filament-schemas::components.tabs';
 
     public int|Closure $activeTab = 1;
 
@@ -113,7 +113,7 @@ class TranslatableTabs extends Component
         if ($this->isTabPersistedInQueryString()) {
             $queryStringTab = request()->query($this->getTabQueryStringKey());
 
-            foreach ($this->getChildComponentContainer()->getComponents() as $index => $tab) {
+            foreach ($this->getChildSchema()->getComponents() as $index => $tab) {
                 if ($tab->getId() !== $queryStringTab) {
                     continue;
                 }
@@ -184,10 +184,10 @@ class TranslatableTabs extends Component
         return $this->evaluate($this->persistInQueryString);
     }
 
-    public function getChildComponents(): array
+    public function getDefaultChildComponents(): array
     {
         $tabs = [
-            Tab::make('Default')->schema($this->evaluate($this->defaultFields)),
+            \Filament\Schemas\Components\Tabs\Tab::make('Default')->schema($this->evaluate($this->defaultFields)),
         ];
 
         if (! is_null($this->extraTabs)) {
@@ -195,14 +195,14 @@ class TranslatableTabs extends Component
         }
 
         foreach ($this->getLocales() as $locale) {
-            $tabs[] = Tab::make($locale)
+            $tabs[] = \Filament\Schemas\Components\Tabs\Tab::make($locale)
                 ->schema($this->evaluate($this->translatableFields, [
                     'locale' => $locale,
                 ]))
                 ->statePath($locale)
                 ->iconPosition('after')
                 // ->iconColor((fn (Get $get) => ($get("{$locale}.online") ? 'success' : 'danger')))
-                ->icon(fn (Get $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle'))
+                ->icon(fn (\Filament\Schemas\Components\Utilities\Get $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle'))
                 ->badge(function (Livewire $livewire) use ($locale) {
                     if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
                         $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
