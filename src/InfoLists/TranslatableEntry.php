@@ -4,19 +4,17 @@ namespace Codedor\TranslatableTabs\InfoLists;
 
 use Codedor\LocaleCollection\Facades\LocaleCollection;
 use Codedor\LocaleCollection\Locale;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
 
 class TranslatableEntry
 {
     public static function make(
         array $schema = [],
         string $localeCollectionClass = LocaleCollection::class
-    ): Section {
+    ): \Filament\Schemas\Components\Section {
         $currentLocale = app()->getLocale();
 
         $tabs = $localeCollectionClass::map(
-            fn (Locale $locale) => Tabs\Tab::make($locale->locale())
+            fn (Locale $locale) => \Filament\Schemas\Components\Tabs\Tab::make($locale->locale())
                 ->schema(function () use ($schema, $locale) {
                     app()->setLocale($locale->locale());
 
@@ -26,8 +24,8 @@ class TranslatableEntry
 
         app()->setLocale($currentLocale);
 
-        return Section::make([
-            Tabs::make()
+        return \Filament\Schemas\Components\Section::make([
+            \Filament\Schemas\Components\Tabs::make()
                 ->tabs($tabs)
                 ->contained(false),
         ]);

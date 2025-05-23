@@ -41,7 +41,7 @@ class CopyTranslationAction extends Action
 
         $this->successNotificationTitle(__('filament-translatable-tabs::copy-translation.success notification'));
 
-        $this->form([
+        $this->schema([
             Select::make('from_locale')
                 ->options($this->getLocales())
                 ->required(),
