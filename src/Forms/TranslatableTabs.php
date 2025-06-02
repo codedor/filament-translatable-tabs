@@ -3,11 +3,10 @@
 namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
-use Filament\Forms\Components\Component;
-use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Get;
+use Filament\Schemas\Components\Concerns\HasLabel;
+use Filament\Schemas\Contracts\HasRenderHookScopes;
 use Filament\Support\Concerns\CanBeContained;
-use Filament\Support\Concerns\CanPersistTab;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
@@ -18,6 +17,7 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
     use CanBeContained;
     use \Filament\Schemas\Components\Concerns\CanPersistTab;
     use HasExtraAlpineAttributes;
+    use HasLabel;
 
     protected string $view = 'filament-schemas::components.tabs';
 
@@ -34,6 +34,17 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
     public array|Closure $locales = [];
 
     public null|string|Closure $icon = null;
+
+    protected bool | Closure $isVertical = false;
+
+    protected string | Closure | null $livewireProperty = null;
+
+    protected array $startRenderHooks = [];
+
+    /**
+     * @var array<string>
+     */
+    protected array $endRenderHooks = [];
 
     final public function __construct(string $label)
     {
@@ -217,5 +228,79 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
         }
 
         return $tabs;
+    }
+
+    public function livewireProperty(string | Closure | null $property): static
+    {
+        $this->livewireProperty = $property;
+
+        return $this;
+    }
+
+    public function getLivewireProperty(): ?string
+    {
+        return $this->evaluate($this->livewireProperty);
+    }
+
+    public function vertical(bool | Closure $condition = true): static
+    {
+        $this->isVertical = $condition;
+
+        return $this;
+    }
+
+    public function isVertical(): bool
+    {
+        return (bool) $this->evaluate($this->isVertical);
+    }
+
+    /**
+     * @param  array<string>  $hooks
+     */
+    public function startRenderHooks(array $hooks): static
+    {
+        $this->startRenderHooks = $hooks;
+
+        return $this;
+    }
+
+    /**
+     * @param  array<string>  $hooks
+     */
+    public function endRenderHooks(array $hooks): static
+    {
+        $this->endRenderHooks = $hooks;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getStartRenderHooks(): array
+    {
+        return $this->startRenderHooks;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getEndRenderHooks(): array
+    {
+        return $this->endRenderHooks;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getRenderHookScopes(): array
+    {
+        $livewire = $this->getLivewire();
+
+        if (! ($livewire instanceof HasRenderHookScopes)) {
+            return [];
+        }
+
+        return $livewire->getRenderHookScopes();
     }
 }

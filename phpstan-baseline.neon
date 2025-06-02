@@ -20,7 +20,3 @@ parameters:
             message: "#Trait Codedor\\\\TranslatableTabs\\\\Resources\\\\Traits\\\\HasTranslations is used zero times and is not analysed\\.$#"
             count: 1
             path: src/Resources/Traits/HasTranslations.php
-        -
-            message: "#Property Codedor\\\\TranslatableTabs\\\\Tables\\\\LocalesColumn\\:\\:\\$view \\(view-string\\) does not accept default value of type string\\.$#"
-            count: 1
-            path: src/Tables/LocalesColumn.php
