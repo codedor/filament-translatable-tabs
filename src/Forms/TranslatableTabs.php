@@ -35,9 +35,9 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
 
     public null|string|Closure $icon = null;
 
-    protected bool | Closure $isVertical = false;
+    protected bool|Closure $isVertical = false;
 
-    protected string | Closure | null $livewireProperty = null;
+    protected string|Closure|null $livewireProperty = null;
 
     protected array $startRenderHooks = [];
 
@@ -230,7 +230,7 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
         return $tabs;
     }
 
-    public function livewireProperty(string | Closure | null $property): static
+    public function livewireProperty(string|Closure|null $property): static
     {
         $this->livewireProperty = $property;
 
@@ -242,7 +242,7 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
         return $this->evaluate($this->livewireProperty);
     }
 
-    public function vertical(bool | Closure $condition = true): static
+    public function vertical(bool|Closure $condition = true): static
     {
         $this->isVertical = $condition;
 
