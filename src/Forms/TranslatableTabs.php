@@ -3,26 +3,20 @@
 namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
-use Filament\Forms\Get;
 use Filament\Schemas\Components\Concerns\HasLabel;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Contracts\HasRenderHookScopes;
+use Filament\Schemas\Schema;
 use Filament\Support\Concerns\CanBeContained;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Livewire\Component as Livewire;
 
-class TranslatableTabs extends \Filament\Schemas\Components\Component
+class TranslatableTabs extends Tabs
 {
-    use CanBeContained;
-    use \Filament\Schemas\Components\Concerns\CanPersistTab;
-    use HasExtraAlpineAttributes;
-    use HasLabel;
-
-    protected string $view = 'filament-schemas::components.tabs';
-
-    public int|Closure $activeTab = 1;
-
     public bool|Closure $persistInQueryString = true;
 
     public array|Closure $defaultFields = [];
@@ -33,22 +27,9 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
 
     public array|Closure $locales = [];
 
-    public null|string|Closure $icon = null;
-
-    protected bool|Closure $isVertical = false;
-
-    protected string|Closure|null $livewireProperty = null;
-
-    protected array $startRenderHooks = [];
-
-    /**
-     * @var array<string>
-     */
-    protected array $endRenderHooks = [];
-
-    final public function __construct(string $label)
+    protected function setUp(): void
     {
-        $this->label($label);
+        parent::setUp();
 
         $this->columnSpan(['lg' => 2]);
 
@@ -81,14 +62,6 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
         });
     }
 
-    public static function make(): static
-    {
-        $static = app(static::class, ['label' => 'Translations']);
-        $static->configure();
-
-        return $static;
-    }
-
     public function dehydrateState(array &$state, bool $isDehydrated = true): void
     {
         parent::dehydrateState($state, $isDehydrated);
@@ -119,23 +92,6 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
         return 'locale';
     }
 
-    public function getActiveTab(): int
-    {
-        if ($this->isTabPersistedInQueryString()) {
-            $queryStringTab = request()->query($this->getTabQueryStringKey());
-
-            foreach ($this->getChildSchema()->getComponents() as $index => $tab) {
-                if ($tab->getId() !== $queryStringTab) {
-                    continue;
-                }
-
-                return $index + 1;
-            }
-        }
-
-        return $this->evaluate($this->activeTab);
-    }
-
     public function defaultFields(array|Closure $defaultFields): static
     {
         $this->defaultFields = $defaultFields;
@@ -152,7 +108,37 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
 
     public function translatableFields(Closure $translatableFields): static
     {
-        $this->translatableFields = $translatableFields;
+        $tabs = [
+            Tabs\Tab::make('Default')->schema($this->evaluate($this->defaultFields)),
+        ];
+
+        if (! is_null($this->extraTabs)) {
+            $tabs = array_merge($tabs, $this->evaluate($this->extraTabs));
+        }
+
+        foreach ($this->getLocales() as $locale) {
+            $tabs[] = Tabs\Tab::make($locale)
+                ->schema($this->evaluate($translatableFields, [
+                    'locale' => $locale,
+                ]))
+                ->statePath($locale)
+                ->iconPosition('after')
+                // ->iconColor((fn (Get $get) => ($get("{$locale}.online") ? 'success' : 'danger')))
+                ->icon(fn (Get $get) => $get("{$locale}.online") ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
+                ->badge(function (Livewire $livewire) use ($locale) {
+                    if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
+                        $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
+
+                        return trans_choice('{1} :count error|[2,*] :count errors', $count, [
+                            'count' => $count,
+                        ]);
+                    }
+
+                    return null;
+                });
+        }
+
+        $this->tabs($tabs);
 
         return $this;
     }
@@ -167,140 +153,5 @@ class TranslatableTabs extends \Filament\Schemas\Components\Component
     public function getLocales(): array
     {
         return $this->evaluate($this->locales);
-    }
-
-    public function icon(null|string|Closure $icon): static
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }
-
-    public function getIcon(string $locale): ?string
-    {
-        return $this->evaluate($this->icon, [
-            'locale' => $locale,
-        ]);
-    }
-
-    public function persistInQueryString(bool|Closure $condition = true): static
-    {
-        $this->persistInQueryString = $condition;
-
-        return $this;
-    }
-
-    public function isTabPersistedInQueryString(): bool
-    {
-        return $this->evaluate($this->persistInQueryString);
-    }
-
-    public function getDefaultChildComponents(): array
-    {
-        $tabs = [
-            \Filament\Schemas\Components\Tabs\Tab::make('Default')->schema($this->evaluate($this->defaultFields)),
-        ];
-
-        if (! is_null($this->extraTabs)) {
-            $tabs = array_merge($tabs, $this->evaluate($this->extraTabs));
-        }
-
-        foreach ($this->getLocales() as $locale) {
-            $tabs[] = \Filament\Schemas\Components\Tabs\Tab::make($locale)
-                ->schema($this->evaluate($this->translatableFields, [
-                    'locale' => $locale,
-                ]))
-                ->statePath($locale)
-                ->iconPosition('after')
-                // ->iconColor((fn (Get $get) => ($get("{$locale}.online") ? 'success' : 'danger')))
-                ->icon(fn (\Filament\Schemas\Components\Utilities\Get $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle'))
-                ->badge(function (Livewire $livewire) use ($locale) {
-                    if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
-                        $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
-
-                        return trans_choice('{1} :count error|[2,*] :count errors', $count, [
-                            'count' => $count,
-                        ]);
-                    }
-
-                    return null;
-                });
-        }
-
-        return $tabs;
-    }
-
-    public function livewireProperty(string|Closure|null $property): static
-    {
-        $this->livewireProperty = $property;
-
-        return $this;
-    }
-
-    public function getLivewireProperty(): ?string
-    {
-        return $this->evaluate($this->livewireProperty);
-    }
-
-    public function vertical(bool|Closure $condition = true): static
-    {
-        $this->isVertical = $condition;
-
-        return $this;
-    }
-
-    public function isVertical(): bool
-    {
-        return (bool) $this->evaluate($this->isVertical);
-    }
-
-    /**
-     * @param  array<string>  $hooks
-     */
-    public function startRenderHooks(array $hooks): static
-    {
-        $this->startRenderHooks = $hooks;
-
-        return $this;
-    }
-
-    /**
-     * @param  array<string>  $hooks
-     */
-    public function endRenderHooks(array $hooks): static
-    {
-        $this->endRenderHooks = $hooks;
-
-        return $this;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getStartRenderHooks(): array
-    {
-        return $this->startRenderHooks;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getEndRenderHooks(): array
-    {
-        return $this->endRenderHooks;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getRenderHookScopes(): array
-    {
-        $livewire = $this->getLivewire();
-
-        if (! ($livewire instanceof HasRenderHookScopes)) {
-            return [];
-        }
-
-        return $livewire->getRenderHookScopes();
     }
 }
