@@ -3,16 +3,10 @@
 namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
-use Filament\Schemas\Components\Concerns\HasLabel;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Contracts\HasRenderHookScopes;
-use Filament\Schemas\Schema;
-use Filament\Support\Concerns\CanBeContained;
-use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Livewire\Component as Livewire;
 
 class TranslatableTabs extends Tabs
