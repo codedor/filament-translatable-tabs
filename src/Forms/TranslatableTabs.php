@@ -4,6 +4,7 @@ namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
 use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Livewire\Component as Livewire;
@@ -153,7 +154,7 @@ class TranslatableTabs extends Tabs
                 ->id($locale)
                 ->statePath($locale)
                 ->iconPosition('after')
-                ->icon(fn (\Filament\Schemas\Components\Utilities\Get $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle'))
+                ->icon(fn (Get $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle'))
                 ->badge(function (Livewire $livewire) use ($locale) {
                     if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
                         $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
