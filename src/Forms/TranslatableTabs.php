@@ -3,22 +3,13 @@
 namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
-use Filament\Schemas\Components\Concerns\HasLabel;
 use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Contracts\HasRenderHookScopes;
-use Filament\Schemas\Schema;
-use Filament\Support\Concerns\CanBeContained;
-use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Livewire\Component as Livewire;
 
 class TranslatableTabs extends Tabs
 {
-    public bool|Closure $persistInQueryString = true;
-
     public array|Closure $defaultFields = [];
 
     public null|array|Closure $extraTabs = null;
@@ -27,11 +18,15 @@ class TranslatableTabs extends Tabs
 
     public array|Closure $locales = [];
 
+    public null|string|Closure $icon = null;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->columnSpan(['lg' => 2]);
+
+        $this->persistTabInQueryString('locale');
 
         $this->afterStateHydrated(static function (TranslatableTabs $component, string|array|null $state, Livewire $livewire): void {
             if (blank($state)) {
@@ -60,6 +55,8 @@ class TranslatableTabs extends Tabs
 
             $component->state($state);
         });
+
+        $this->tabs([]);
     }
 
     public function dehydrateState(array &$state, bool $isDehydrated = true): void
@@ -87,11 +84,6 @@ class TranslatableTabs extends Tabs
         }
     }
 
-    public function getTabQueryStringKey(): ?string
-    {
-        return 'locale';
-    }
-
     public function defaultFields(array|Closure $defaultFields): static
     {
         $this->defaultFields = $defaultFields;
@@ -108,37 +100,7 @@ class TranslatableTabs extends Tabs
 
     public function translatableFields(Closure $translatableFields): static
     {
-        $tabs = [
-            Tabs\Tab::make('Default')->schema($this->evaluate($this->defaultFields)),
-        ];
-
-        if (! is_null($this->extraTabs)) {
-            $tabs = array_merge($tabs, $this->evaluate($this->extraTabs));
-        }
-
-        foreach ($this->getLocales() as $locale) {
-            $tabs[] = Tabs\Tab::make($locale)
-                ->schema($this->evaluate($translatableFields, [
-                    'locale' => $locale,
-                ]))
-                ->statePath($locale)
-                ->iconPosition('after')
-                // ->iconColor((fn (Get $get) => ($get("{$locale}.online") ? 'success' : 'danger')))
-                ->icon(fn (Get $get) => $get("{$locale}.online") ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
-                ->badge(function (Livewire $livewire) use ($locale) {
-                    if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
-                        $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
-
-                        return trans_choice('{1} :count error|[2,*] :count errors', $count, [
-                            'count' => $count,
-                        ]);
-                    }
-
-                    return null;
-                });
-        }
-
-        $this->tabs($tabs);
+        $this->translatableFields = $translatableFields;
 
         return $this;
     }
@@ -153,5 +115,58 @@ class TranslatableTabs extends Tabs
     public function getLocales(): array
     {
         return $this->evaluate($this->locales);
+    }
+
+    public function icon(null|string|Closure $icon): static
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    public function getIcon(string $locale): ?string
+    {
+        return $this->evaluate($this->icon, [
+            'locale' => $locale,
+        ]);
+    }
+
+    public function getDefaultChildComponents(): array
+    {
+        $tabs = [
+            \Filament\Schemas\Components\Tabs\Tab::make('Default')
+                ->schema($this->evaluate($this->defaultFields))
+                ->id('default')
+                ->key('default'),
+        ];
+
+        if (! is_null($this->extraTabs)) {
+            $tabs = array_merge($tabs, $this->evaluate($this->extraTabs));
+        }
+
+        foreach ($this->getLocales() as $locale) {
+            $tabs[] = \Filament\Schemas\Components\Tabs\Tab::make($locale)
+                ->schema($this->evaluate($this->translatableFields, [
+                    'locale' => $locale,
+                ]))
+                ->key($locale)
+                ->id($locale)
+                ->statePath($locale)
+                ->iconPosition('after')
+                ->icon(fn (\Filament\Schemas\Components\Utilities\Get $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle'))
+                ->badge(function (Livewire $livewire) use ($locale) {
+                    if ($livewire->getErrorBag()->has("data.{$locale}.*")) {
+                        $count = count($livewire->getErrorBag()->get("data.{$locale}.*"));
+
+                        return trans_choice('{1} :count error|[2,*] :count errors', $count, [
+                            'count' => $count,
+                        ]);
+                    }
+
+                    return null;
+                });
+        }
+
+        return $tabs;
     }
 }
