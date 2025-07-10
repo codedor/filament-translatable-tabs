@@ -4,8 +4,10 @@ namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
 use Codedor\TranslatableTabs\Forms\Casts\TranslatableTabsStateCast;
+use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Utilities\Get;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Livewire\Component as Livewire;
 
@@ -29,7 +31,46 @@ class TranslatableTabs extends Tabs
 
         $this->persistTabInQueryString('locale');
 
-        $this->stateCast(fn (Livewire $livewire) => app(TranslatableTabsStateCast::class, ['livewire' => $livewire]));
+        $this->afterStateHydrated(static function (TranslatableTabs $component, string|array|null $state, Livewire $livewire): void {
+            if (blank($state)) {
+                $component->state([]);
+
+                return;
+            }
+
+            $record = method_exists($livewire, 'getRecord') ? $livewire->getRecord() : null;
+
+            if (! $record || ! method_exists($record, 'getTranslatableAttributes')) {
+                return;
+            }
+
+            foreach ($record->getTranslatableAttributes() as $field) {
+                foreach ($record->getTranslatedLocales($field) as $locale) {
+                    $value = $record->getTranslation($field, $locale);
+
+                    if ($value instanceof Arrayable) {
+                        $value = $value->toArray();
+                    }
+
+                    // RichEditor hack
+                    if (isset($state[$locale][$field]) && is_array($state[$locale][$field])) {
+                        if (isset($state[$locale][$field]['type']) && $state[$locale][$field]['type'] === 'doc' && isset($state[$locale][$field]['content'])) {
+                            $components = $livewire->form->getFlatComponents(withActions: false, withHidden: true);
+
+                            if (isset($components["{$locale}.{$field}"]) && $components["{$locale}.{$field}"] instanceof RichEditor) {
+                                $value = $components["{$locale}.{$field}"]->getTipTapEditor()
+                                    ->setContent($value)
+                                    ->getDocument();
+                            }
+                        }
+                    }
+
+                    $state[$locale][$field] = $value;
+                }
+            }
+
+            $component->state($state);
+        });
 
         $this->tabs([]);
     }
