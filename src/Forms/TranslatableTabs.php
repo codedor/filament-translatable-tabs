@@ -3,7 +3,6 @@
 namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
-use Codedor\TranslatableTabs\Forms\Casts\TranslatableTabsStateCast;
 use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Utilities\Get;
