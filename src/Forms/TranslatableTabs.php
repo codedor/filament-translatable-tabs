@@ -3,6 +3,7 @@
 namespace Codedor\TranslatableTabs\Forms;
 
 use Closure;
+use Codedor\TranslatableTabs\Forms\Casts\TranslatableTabsStateCast;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Contracts\Support\Arrayable;
@@ -29,33 +30,7 @@ class TranslatableTabs extends Tabs
 
         $this->persistTabInQueryString('locale');
 
-        $this->afterStateHydrated(static function (TranslatableTabs $component, string|array|null $state, Livewire $livewire): void {
-            if (blank($state)) {
-                $component->state([]);
-
-                return;
-            }
-
-            $record = method_exists($livewire, 'getRecord') ? $livewire->getRecord() : null;
-
-            if (! $record || ! method_exists($record, 'getTranslatableAttributes')) {
-                return;
-            }
-
-            foreach ($record->getTranslatableAttributes() as $field) {
-                foreach ($record->getTranslatedLocales($field) as $locale) {
-                    $value = $record->getTranslation($field, $locale);
-
-                    if ($value instanceof Arrayable) {
-                        $value = $value->toArray();
-                    }
-
-                    $state[$locale][$field] = $value;
-                }
-            }
-
-            $component->state($state);
-        });
+        $this->stateCast(fn (Livewire $livewire) => app(TranslatableTabsStateCast::class, ['livewire' => $livewire]));
 
         $this->tabs([]);
     }

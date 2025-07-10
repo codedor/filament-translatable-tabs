@@ -11,11 +11,15 @@ parameters:
         -
             message: "#^Cannot call method getTranslatedLocales\\(\\)\\ on class-string\\|object\\.$#"
             count: 1
-            path: src/Forms/TranslatableTabs.php
+            path: src/Forms/Casts/TranslatableTabsStateCast.php
         -
             message: "#^Cannot call method getTranslation\\(\\)\\ on class-string\\|object\\.$#"
             count: 1
-            path: src/Forms/TranslatableTabs.php
+            path: src/Forms/Casts/TranslatableTabsStateCast.php
+        -
+            message: "#^Access to an undefined property Livewire\\\\Component\\:\\:\\$form\\.$#"
+            count: 1
+            path: src/Forms/Casts/TranslatableTabsStateCast.php
         -
             message: "#Trait Codedor\\\\TranslatableTabs\\\\Resources\\\\Traits\\\\HasTranslations is used zero times and is not analysed\\.$#"
             count: 1
