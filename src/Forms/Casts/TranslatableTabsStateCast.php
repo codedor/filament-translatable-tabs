@@ -14,7 +14,7 @@ class TranslatableTabsStateCast implements StateCast
         protected Component $livewire,
     ) {}
 
-    public function get(mixed $state): string | array
+    public function get(mixed $state): string|array
     {
         // see how we can set the state here instead of using dehydrateState in TranslatableTabs
         return $state;

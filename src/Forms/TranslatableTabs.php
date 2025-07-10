@@ -6,7 +6,6 @@ use Closure;
 use Codedor\TranslatableTabs\Forms\Casts\TranslatableTabsStateCast;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Utilities\Get;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Livewire\Component as Livewire;
 
