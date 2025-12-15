@@ -44,7 +44,7 @@ class LocalesColumn extends Column
         /** @var \Filament\Resources\Resource $resource */
         $url = $resource::getUrl($this->resourceAction, [
             'record' => $this->getRecord(),
-            'locale' => "-{$locale}-tab",
+            'locale' => $locale,
         ]);
 
         return Str::lower($url);
