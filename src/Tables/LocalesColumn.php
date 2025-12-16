@@ -42,7 +42,7 @@ class LocalesColumn extends Column
 
         if (method_exists($livewire, 'getResource')) {
             $resource = $livewire->getResource();
-        } else if (method_exists($livewire, 'getRelatedResource')) {
+        } elseif (method_exists($livewire, 'getRelatedResource')) {
             $resource = $livewire->getRelatedResource();
         } else {
             throw new Exception('Can not find a resource, make sure you are in a resource page or relation manager');
