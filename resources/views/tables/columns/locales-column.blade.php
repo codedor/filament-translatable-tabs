@@ -4,7 +4,7 @@
             href="{{ $getResourceUrl($locale) }}"
             @style([
                 match ($getRecord()->getTranslation($getName(), $locale)) {
-                    false,null,'' => \Filament\Support\get_color_css_variables('danger', shades: [500, 700]),
+                    false,null,0,'' => \Filament\Support\get_color_css_variables('danger', shades: [500, 700]),
                     default => \Filament\Support\get_color_css_variables('success', shades: [500, 700]),
                 }
             ])

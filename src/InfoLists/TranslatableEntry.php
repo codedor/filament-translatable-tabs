@@ -2,27 +2,20 @@
 
 namespace Codedor\TranslatableTabs\InfoLists;
 
+use Closure;
 use Codedor\LocaleCollection\Facades\LocaleCollection;
 use Codedor\LocaleCollection\Locale;
 
 class TranslatableEntry
 {
     public static function make(
-        array $schema = [],
+        Closure $schema,
         string $localeCollectionClass = LocaleCollection::class
     ): \Filament\Schemas\Components\Section {
-        $currentLocale = app()->getLocale();
-
         $tabs = $localeCollectionClass::map(
             fn (Locale $locale) => \Filament\Schemas\Components\Tabs\Tab::make($locale->locale())
-                ->schema(function () use ($schema, $locale) {
-                    app()->setLocale($locale->locale());
-
-                    return $schema;
-                })
+                ->schema($schema($locale))
         )->toArray();
-
-        app()->setLocale($currentLocale);
 
         return \Filament\Schemas\Components\Section::make([
             \Filament\Schemas\Components\Tabs::make()
