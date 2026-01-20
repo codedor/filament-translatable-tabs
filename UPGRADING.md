@@ -1,15 +1,13 @@
 # Upgrading
 
-## From v2 to v3
-
-- Install wotz/filament-translatable-tabs instead of codedor/filament-translatable-tabs
-- Replace all occurrences of Codedor\TranslatableTabs namespace with new Wotz\TranslatableTabs namespace
-
 ## From v1 to v2
+
+- Install `wotz/filament-translatable-tabs` instead of `codedor/filament-translatable-tabs`
+- Replace all occurrences of `Codedor\TranslatableTabs` namespace with new `Wotz\TranslatableTabs` namespace
 
 ### TranslatableEntry
 
-Instead of an array, we expect a closure now.
+- Instead of an array, we expect a closure now.
 
 ```php
 use Codedor\TranslatableTabs\InfoLists\TranslatableEntry;
