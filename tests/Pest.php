@@ -1,5 +1,5 @@
 <?php
 
-use Codedor\TranslatableTabs\Tests\TestCase;
+use Wotz\TranslatableTabs\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

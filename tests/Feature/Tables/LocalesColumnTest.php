@@ -1,6 +1,6 @@
 <?php
 
-use Codedor\TranslatableTabs\Tables\LocalesColumn;
+use Wotz\TranslatableTabs\Tables\LocalesColumn;
 
 it('can test', function () {
     $column = LocalesColumn::make('online')

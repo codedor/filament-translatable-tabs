@@ -1,6 +1,6 @@
 <?php
 
-namespace Codedor\TranslatableTabs\Providers;
+namespace Wotz\TranslatableTabs\Providers;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;

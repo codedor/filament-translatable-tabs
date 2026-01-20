@@ -1,30 +1,17 @@
 <?php
 
-namespace Codedor\TranslatableTabs\Forms;
+namespace Wotz\TranslatableTabs\Forms;
 
 use Closure;
-use Filament\Forms\Components\Component;
-use Filament\Forms\Components\Tabs\Tab;
-use Filament\Forms\Get;
-use Filament\Support\Concerns\CanBeContained;
-use Filament\Support\Concerns\CanPersistTab;
-use Filament\Support\Concerns\HasExtraAlpineAttributes;
+use Filament\Forms\Components\RichEditor;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Livewire\Component as Livewire;
 
-class TranslatableTabs extends Component
+class TranslatableTabs extends Tabs
 {
-    use CanBeContained;
-    use CanPersistTab;
-    use HasExtraAlpineAttributes;
-
-    protected string $view = 'filament-forms::components.tabs';
-
-    public int|Closure $activeTab = 1;
-
-    public bool|Closure $persistInQueryString = true;
-
     public array|Closure $defaultFields = [];
 
     public null|array|Closure $extraTabs = null;
@@ -35,11 +22,13 @@ class TranslatableTabs extends Component
 
     public null|string|Closure $icon = null;
 
-    final public function __construct(string $label)
+    protected function setUp(): void
     {
-        $this->label($label);
+        parent::setUp();
 
         $this->columnSpan(['lg' => 2]);
+
+        $this->persistTabInQueryString('locale');
 
         $this->afterStateHydrated(static function (TranslatableTabs $component, string|array|null $state, Livewire $livewire): void {
             if (blank($state)) {
@@ -62,20 +51,27 @@ class TranslatableTabs extends Component
                         $value = $value->toArray();
                     }
 
+                    // RichEditor hack
+                    if (isset($state[$locale][$field]) && is_array($state[$locale][$field])) {
+                        if (isset($state[$locale][$field]['type']) && $state[$locale][$field]['type'] === 'doc' && isset($state[$locale][$field]['content'])) {
+                            $components = $livewire->form->getFlatComponents(withActions: false, withHidden: true);
+
+                            if (isset($components["{$locale}.{$field}"]) && $components["{$locale}.{$field}"] instanceof RichEditor) {
+                                $value = $components["{$locale}.{$field}"]->getTipTapEditor()
+                                    ->setContent($value)
+                                    ->getDocument();
+                            }
+                        }
+                    }
+
                     $state[$locale][$field] = $value;
                 }
             }
 
             $component->state($state);
         });
-    }
 
-    public static function make(): static
-    {
-        $static = app(static::class, ['label' => 'Translations']);
-        $static->configure();
-
-        return $static;
+        $this->tabs([]);
     }
 
     public function dehydrateState(array &$state, bool $isDehydrated = true): void
@@ -101,28 +97,6 @@ class TranslatableTabs extends Component
                 $state['data'][$key][$locale] = $value;
             }
         }
-    }
-
-    public function getTabQueryStringKey(): ?string
-    {
-        return 'locale';
-    }
-
-    public function getActiveTab(): int
-    {
-        if ($this->isTabPersistedInQueryString()) {
-            $queryStringTab = request()->query($this->getTabQueryStringKey());
-
-            foreach ($this->getChildComponentContainer()->getComponents() as $index => $tab) {
-                if ($tab->getId() !== $queryStringTab) {
-                    continue;
-                }
-
-                return $index + 1;
-            }
-        }
-
-        return $this->evaluate($this->activeTab);
     }
 
     public function defaultFields(array|Closure $defaultFields): static
@@ -172,22 +146,13 @@ class TranslatableTabs extends Component
         ]);
     }
 
-    public function persistInQueryString(bool|Closure $condition = true): static
-    {
-        $this->persistInQueryString = $condition;
-
-        return $this;
-    }
-
-    public function isTabPersistedInQueryString(): bool
-    {
-        return $this->evaluate($this->persistInQueryString);
-    }
-
-    public function getChildComponents(): array
+    public function getDefaultChildComponents(): array
     {
         $tabs = [
-            Tab::make('Default')->schema($this->evaluate($this->defaultFields)),
+            \Filament\Schemas\Components\Tabs\Tab::make('Default')
+                ->schema($this->evaluate($this->defaultFields))
+                ->id('default')
+                ->key('default'),
         ];
 
         if (! is_null($this->extraTabs)) {
@@ -195,13 +160,14 @@ class TranslatableTabs extends Component
         }
 
         foreach ($this->getLocales() as $locale) {
-            $tabs[] = Tab::make($locale)
+            $tabs[] = \Filament\Schemas\Components\Tabs\Tab::make($locale)
                 ->schema($this->evaluate($this->translatableFields, [
                     'locale' => $locale,
                 ]))
+                ->key($locale)
+                ->id($locale)
                 ->statePath($locale)
                 ->iconPosition('after')
-                // ->iconColor((fn (Get $get) => ($get("{$locale}.online") ? 'success' : 'danger')))
                 ->icon(fn (Get $get) => $this->getIcon($locale) ?? ($get("{$locale}.online") ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle'))
                 ->badge(function (Livewire $livewire) use ($locale) {
                     if ($livewire->getErrorBag()->has("data.{$locale}.*")) {

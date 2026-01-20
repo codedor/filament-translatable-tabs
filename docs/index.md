@@ -11,34 +11,26 @@ Adds a tab per locale and adds integration for [spatie/laravel-translatable](htt
 You can install the package via composer:
 
 ```bash
-composer require codedor/filament-translatable-tabs
+composer require wotz/filament-translatable-tabs
 ```
+
+In an effort to align with Filament's theming methodology you will need to use a custom theme to use this plugin.
 
 > **Note**
-> If you have not set up a custom theme and are using a Panel follow the instructions in the [Filament Docs](https://filamentphp.com/docs/3.x/panels/themes#creating-a-custom-theme) first. The following applies to both the Panels Package and the standalone Forms package.
+> If you have not set up a custom theme and are using a Panel follow the instructions in the [Filament Docs](https://filamentphp.com/docs/5.x/styling/overview#creating-a-custom-theme) first. The following applies to both the Panels Package and the standalone Forms package.
 
-1. Import the plugin's stylesheet (if not already included) into your theme's css file.
+After setting up a custom theme, add the plugin's views to your theme css file or your app's css file if using the standalone packages.
 
 ```css
-@import '../../../../vendor/codedor/filament-translatable-tabs/resources/css/plugin.css';
+@source '../../../../vendor/wotz/filament-translatable-tabs/resources/**/*.blade.php';
 ```
-
-2. Add the plugin's views to your `tailwind.config.js` file.
-
-```js
-content: [
-    ...
-    './vendor/codedor/filament-translatable-tabs/resources/**/*.blade.php',
-]
-```
-
 
 ## Getting started
 
 Add the TranslatableTabs to your resource form:
 
 ```php
-use Codedor\TranslatableTabs\Forms\TranslatableTabs;
+use Wotz\TranslatableTabs\Forms\TranslatableTabs;
 
 public static function form(Form $form): Form
 {
@@ -69,7 +61,7 @@ The default fields are the non-translatable fields and the translatable fields w
 And add the `HasTranslations` trait to your pages with a form on (will be mostly Create and Edit):
 
 ```php
-use Codedor\TranslatableTabs\Resources\Traits\HasTranslations;
+use Wotz\TranslatableTabs\Resources\Traits\HasTranslations;
 ```
 
 This trait is necessary to save the translations together with your other fields. Since we have to manipulate the data after the form is submitted.
@@ -79,7 +71,7 @@ We also provide a column to display your locales in a Filament table.
 ![locales-column.png](locales-column.png)
 
 ```php
-use Codedor\TranslatableTabs\Tables\LocalesColumn;
+use Wotz\TranslatableTabs\Tables\LocalesColumn;
 
 public static function table(Table $table): Table
 {
@@ -96,7 +88,7 @@ public static function table(Table $table): Table
 And also an entry for info lists.
 
 ```php
-use Codedor\TranslatableTabs\InfoLists\TranslatableEntry;
+use Wotz\TranslatableTabs\InfoLists\TranslatableEntry;
 
 TranslatableEntry::make([
     \Filament\Infolists\Components\TextEntry::make('title'),
@@ -107,7 +99,7 @@ TranslatableEntry::make([
 By default, we will check the `LocaleCollection` facade, but you can also pass your own.
 
 ```php
-use Codedor\TranslatableTabs\InfoLists\TranslatableEntry;
+use Wotz\TranslatableTabs\InfoLists\TranslatableEntry;
 
 TranslatableEntry::make([
     \Filament\Infolists\Components\TextEntry::make('title'),
@@ -121,7 +113,7 @@ You can add extra tabs by using the `->extraTabs()` method, this expects a Closu
 Passing an array here with Tabs will add them next to the general tab, this can be useful for separating your General tab in case it becomes too long.
 
 ```php
-use Codedor\TranslatableTabs\Forms\TranslatableTabs;
+use Wotz\TranslatableTabs\Forms\TranslatableTabs;
 use Filament\Forms\Components\Tabs\Tab;
 
 public static function form(Form $form): Form
@@ -147,14 +139,14 @@ You can show a different icon by using the `icon()` method, this expects a Closu
 If `false` is returned, no icon will be shown. If a string or Closure is used it will expect a heroicon component, for example:
 
 ```php
-\Codedor\TranslatableTabs\Forms\TranslatableTabs::make('translations')
+\Wotz\TranslatableTabs\Forms\TranslatableTabs::make('translations')
     ->icon('heroicon-o-status-online');
 ```
 
 Or when using a Closure:
 
 ```php
-\Codedor\TranslatableTabs\Forms\TranslatableTabs::make('translations')
+\Wotz\TranslatableTabs\Forms\TranslatableTabs::make('translations')
     ->icon(fn (string $locale, Closure $get) => $get("{$locale}.online") ? 'heroicon-o-status-online' : 'heroicon-o-status-offline');
 ```
 
@@ -163,9 +155,9 @@ Or when using a Closure:
 For both fields you can pass the locales through a `locales()` method
 
 ```php
-\Codedor\TranslatableTabs\Tables\LocalesColumn::make('online')
+\Wotz\TranslatableTabs\Tables\LocalesColumn::make('online')
     ->locales(['en', 'nl']);
-\Codedor\TranslatableTabs\Forms\TranslatableTabs::make('translations')
+\Wotz\TranslatableTabs\Forms\TranslatableTabs::make('translations')
     ->locales(fn () => config('app.locales'));
 ```
 
@@ -195,7 +187,7 @@ This package provides an action to copy a locale to another locale.
 To use it add it to your Edit page, e.g.:
 
 ```php
-use Codedor\TranslatableTabs\Actions\CopyTranslationAction;
+use Wotz\TranslatableTabs\Actions\CopyTranslationAction;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 

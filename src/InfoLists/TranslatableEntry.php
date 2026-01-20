@@ -1,33 +1,24 @@
 <?php
 
-namespace Codedor\TranslatableTabs\InfoLists;
+namespace Wotz\TranslatableTabs\InfoLists;
 
-use Codedor\LocaleCollection\Facades\LocaleCollection;
-use Codedor\LocaleCollection\Locale;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
+use Closure;
+use Wotz\LocaleCollection\Facades\LocaleCollection;
+use Wotz\LocaleCollection\Locale;
 
 class TranslatableEntry
 {
     public static function make(
-        array $schema = [],
+        Closure $schema,
         string $localeCollectionClass = LocaleCollection::class
-    ): Section {
-        $currentLocale = app()->getLocale();
-
+    ): \Filament\Schemas\Components\Section {
         $tabs = $localeCollectionClass::map(
-            fn (Locale $locale) => Tabs\Tab::make($locale->locale())
-                ->schema(function () use ($schema, $locale) {
-                    app()->setLocale($locale->locale());
-
-                    return $schema;
-                })
+            fn (Locale $locale) => \Filament\Schemas\Components\Tabs\Tab::make($locale->locale())
+                ->schema($schema($locale))
         )->toArray();
 
-        app()->setLocale($currentLocale);
-
-        return Section::make([
-            Tabs::make()
+        return \Filament\Schemas\Components\Section::make([
+            \Filament\Schemas\Components\Tabs::make()
                 ->tabs($tabs)
                 ->contained(false),
         ]);

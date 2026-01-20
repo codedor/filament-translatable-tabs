@@ -1,6 +1,6 @@
 <?php
 
-namespace Codedor\TranslatableTabs\Actions;
+namespace Wotz\TranslatableTabs\Actions;
 
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
@@ -41,7 +41,7 @@ class CopyTranslationAction extends Action
 
         $this->successNotificationTitle(__('filament-translatable-tabs::copy-translation.success notification'));
 
-        $this->form([
+        $this->schema(fn (): array => [
             Select::make('from_locale')
                 ->options($this->getLocales())
                 ->required(),
