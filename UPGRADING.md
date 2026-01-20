@@ -1,5 +1,10 @@
 # Upgrading
 
+## From v2 to v3
+
+- Install wotz/filament-translatable-tabs instead of codedor/filament-translatable-tabs
+- Replace all occurrences of Codedor\TranslatableTabs namespace with new Wotz\TranslatableTabs namespace
+
 ## From v1 to v2
 
 ### TranslatableEntry

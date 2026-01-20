@@ -1,6 +1,6 @@
 <?php
 
-namespace Codedor\TranslatableTabs\Actions;
+namespace Wotz\TranslatableTabs\Actions;
 
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;

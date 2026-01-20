@@ -1,6 +1,6 @@
 <?php
 
-namespace Codedor\TranslatableTabs\Forms;
+namespace Wotz\TranslatableTabs\Forms;
 
 use Closure;
 use Filament\Forms\Components\RichEditor;

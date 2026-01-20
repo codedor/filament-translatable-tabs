@@ -1,8 +1,8 @@
 <?php
 
-namespace Codedor\TranslatableTabs\Tests\Fixtures;
+namespace Wotz\TranslatableTabs\Tests\Fixtures;
 
-use Codedor\TranslatableTabs\Forms\TranslatableTabs;
+use Wotz\TranslatableTabs\Forms\TranslatableTabs;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Concerns\InteractsWithSchemas;

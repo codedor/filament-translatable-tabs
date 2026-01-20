@@ -1,6 +1,6 @@
 <?php
 
-namespace Codedor\TranslatableTabs\Tables;
+namespace Wotz\TranslatableTabs\Tables;
 
 use Closure;
 use Exception;

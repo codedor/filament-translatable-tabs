@@ -1,10 +1,10 @@
 <?php
 
-namespace Codedor\TranslatableTabs\InfoLists;
+namespace Wotz\TranslatableTabs\InfoLists;
 
 use Closure;
-use Codedor\LocaleCollection\Facades\LocaleCollection;
-use Codedor\LocaleCollection\Locale;
+use Wotz\LocaleCollection\Facades\LocaleCollection;
+use Wotz\LocaleCollection\Locale;
 
 class TranslatableEntry
 {

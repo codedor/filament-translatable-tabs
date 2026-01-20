@@ -1,6 +1,6 @@
 <?php
 
-use Codedor\TranslatableTabs\Tests\Fixtures\TestForm;
+use Wotz\TranslatableTabs\Tests\Fixtures\TestForm;
 use Livewire\Livewire;
 
 it('can render translatable tabs with default fields and translatable fields', function () {

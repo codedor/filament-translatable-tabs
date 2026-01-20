@@ -1,6 +1,6 @@
 <?php
 
-namespace Codedor\TranslatableTabs\Resources\Traits;
+namespace Wotz\TranslatableTabs\Resources\Traits;
 
 use Filament\Actions\Action;
 use Illuminate\Support\Js;
