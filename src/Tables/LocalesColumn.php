@@ -1,8 +1,9 @@
 <?php
 
-namespace Codedor\TranslatableTabs\Tables;
+namespace Wotz\TranslatableTabs\Tables;
 
 use Closure;
+use Exception;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Support\Str;
@@ -36,15 +37,21 @@ class LocalesColumn extends Column
 
     public function getResourceUrl(string $locale): string
     {
+        /** @var \Filament\Resources\Pages\Page&HasTable $livewire */
         $livewire = $this->getLivewire();
 
-        /** @var \Filament\Resources\Pages\Page&HasTable $livewire */
-        $resource = $livewire::getResource();
+        if (method_exists($livewire, 'getResource')) {
+            $resource = $livewire->getResource();
+        } elseif (method_exists($livewire, 'getRelatedResource')) {
+            $resource = $livewire->getRelatedResource();
+        } else {
+            throw new Exception('Can not find a resource, make sure you are in a resource page or relation manager');
+        }
 
         /** @var \Filament\Resources\Resource $resource */
         $url = $resource::getUrl($this->resourceAction, [
             'record' => $this->getRecord(),
-            'locale' => "-{$locale}-tab",
+            'locale' => $locale,
         ]);
 
         return Str::lower($url);

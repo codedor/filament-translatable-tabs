@@ -1,28 +1,21 @@
 <?php
 
-namespace Codedor\TranslatableTabs\InfoLists;
+namespace Wotz\TranslatableTabs\InfoLists;
 
-use Codedor\LocaleCollection\Facades\LocaleCollection;
-use Codedor\LocaleCollection\Locale;
+use Closure;
+use Wotz\LocaleCollection\Facades\LocaleCollection;
+use Wotz\LocaleCollection\Locale;
 
 class TranslatableEntry
 {
     public static function make(
-        array $schema = [],
+        Closure $schema,
         string $localeCollectionClass = LocaleCollection::class
     ): \Filament\Schemas\Components\Section {
-        $currentLocale = app()->getLocale();
-
         $tabs = $localeCollectionClass::map(
             fn (Locale $locale) => \Filament\Schemas\Components\Tabs\Tab::make($locale->locale())
-                ->schema(function () use ($schema, $locale) {
-                    app()->setLocale($locale->locale());
-
-                    return $schema;
-                })
+                ->schema($schema($locale))
         )->toArray();
-
-        app()->setLocale($currentLocale);
 
         return \Filament\Schemas\Components\Section::make([
             \Filament\Schemas\Components\Tabs::make()

@@ -7,33 +7,24 @@ Adds a tab per locale and adds integration for [spatie/laravel-translatable](htt
 You can install the package via composer:
 
 ```bash
-composer require codedor/filament-translatable-tabs
+composer require wotz/filament-translatable-tabs
 ```
 
 In an effort to align with Filament's theming methodology you will need to use a custom theme to use this plugin.
 
 > **Note**
-> If you have not set up a custom theme and are using a Panel follow the instructions in the [Filament Docs](https://filamentphp.com/docs/3.x/panels/themes#creating-a-custom-theme) first. The following applies to both the Panels Package and the standalone Forms package.
+> If you have not set up a custom theme and are using a Panel follow the instructions in the [Filament Docs](https://filamentphp.com/docs/5.x/styling/overview#creating-a-custom-theme) first. The following applies to both the Panels Package and the standalone Forms package.
 
-1. Import the plugin's stylesheet (if not already included) into your theme's css file.
+After setting up a custom theme, add the plugin's views to your theme css file or your app's css file if using the standalone packages.
 
 ```css
-@import '../../../../vendor/codedor/filament-translatable-tabs/resources/css/plugin.css';
-```
-
-2. Add the plugin's views to your `tailwind.config.js` file.
-
-```js
-content: [
-    ...
-    './vendor/codedor/filament-translatable-tabs/resources/**/*.blade.php',
-]
+@source '../../../../vendor/wotz/filament-translatable-tabs/resources/**/*.blade.php';
 ```
 
 ## Usage
 
 ```php
-use Codedor\TranslatableTabs\Forms\TranslatableTabs;
+use Wotz\TranslatableTabs\Forms\TranslatableTabs;
 
 public static function form(Form $form): Form
 {
@@ -87,7 +78,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 
-If you discover any security-related issues, please email info@codedor.be instead of using the issue tracker.
+If you discover any security-related issues, please email info@whoownsthezebra.be instead of using the issue tracker.
 
 ## License
 
