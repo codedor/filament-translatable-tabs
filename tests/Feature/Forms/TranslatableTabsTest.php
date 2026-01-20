@@ -1,7 +1,7 @@
 <?php
 
-use Wotz\TranslatableTabs\Tests\Fixtures\TestForm;
 use Livewire\Livewire;
+use Wotz\TranslatableTabs\Tests\Fixtures\TestForm;
 
 it('can render translatable tabs with default fields and translatable fields', function () {
     Livewire::test(TestForm::class)

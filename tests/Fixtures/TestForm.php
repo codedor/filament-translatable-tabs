@@ -2,13 +2,13 @@
 
 namespace Wotz\TranslatableTabs\Tests\Fixtures;
 
-use Wotz\TranslatableTabs\Forms\TranslatableTabs;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
 use Livewire\Component;
+use Wotz\TranslatableTabs\Forms\TranslatableTabs;
 
 class TestForm extends Component implements HasSchemas
 {
